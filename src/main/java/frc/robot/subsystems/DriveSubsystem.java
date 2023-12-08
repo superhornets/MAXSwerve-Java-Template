@@ -125,7 +125,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     if (rateLimit) {
       // Convert XY to polar for rate limiting
+      
       double inputTranslationDir = Math.atan2(ySpeed, xSpeed);
+      //System.out.println("inputTranslationDir: " + inputTranslationDir + ", ySpeed: " + ySpeed + ", xSpeed: " + xSpeed);
+      
       double inputTranslationMag = Math.sqrt(Math.pow(xSpeed, 2) + Math.pow(ySpeed, 2));
 
       // Calculate the direction slew rate based on an estimate of the lateral acceleration
@@ -139,6 +142,9 @@ public class DriveSubsystem extends SubsystemBase {
 
       double currentTime = WPIUtilJNI.now() * 1e-6;
       double elapsedTime = currentTime - m_prevTime;
+      if(inputTranslationMag == 0){
+        inputTranslationDir = m_currentTranslationDir;
+      }
       double angleDif = SwerveUtils.AngleDifference(inputTranslationDir, m_currentTranslationDir);
       if (angleDif < 0.45*Math.PI) {
         m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
@@ -158,12 +164,17 @@ public class DriveSubsystem extends SubsystemBase {
         m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
         m_currentTranslationMag = m_magLimiter.calculate(0.0);
       }
+
       m_prevTime = currentTime;
       
       xSpeedCommanded = m_currentTranslationMag * Math.cos(m_currentTranslationDir);
       ySpeedCommanded = m_currentTranslationMag * Math.sin(m_currentTranslationDir);
+      //if(xSpeed==0&&ySpeed==0){
+        //m_currentRotation = rot;
+     // }
+      //else{
       m_currentRotation = m_rotLimiter.calculate(rot);
-
+     // }
 
     } else {
       xSpeedCommanded = xSpeed;
