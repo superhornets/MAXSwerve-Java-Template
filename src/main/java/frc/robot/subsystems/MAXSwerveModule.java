@@ -79,7 +79,7 @@ public class MAXSwerveModule {
 
     // Set the PID gains for the driving motor. Note these are example gains, and you
     // may need to tune them for your own robot!
-    m_drivingPIDController.setP(ModuleConstants.kDrivingP);
+    m_drivingPIDController.setP(.08);
     m_drivingPIDController.setI(ModuleConstants.kDrivingI);
     m_drivingPIDController.setD(ModuleConstants.kDrivingD);
     m_drivingPIDController.setFF(ModuleConstants.kDrivingFF);
@@ -159,6 +159,16 @@ public class MAXSwerveModule {
 
   /** Zeroes all the SwerveModule encoders. */
   public void resetEncoders() {
-    m_drivingEncoder.setPosition(0);
+    m_drivingEncoder.setPosition(0);  // TODO why isn't this resetting the encodeer
+  }
+  public double getEncoderPos(){
+    return m_drivingEncoder.getPosition();
+  }
+  public double getAppliedOutput(){
+    return m_drivingSparkMax.getAppliedOutput();
+  }
+
+  public void driveToDistanceTest(double distance){
+    m_drivingPIDController.setReference(1, CANSparkMax.ControlType.kPosition);
   }
 }

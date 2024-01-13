@@ -193,6 +193,7 @@ public class DriveSubsystem extends SubsystemBase {
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
@@ -253,5 +254,34 @@ public class DriveSubsystem extends SubsystemBase {
   public double getTurnRate() {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
-
+  public void driveDistanceTest(double distance){
+    m_frontLeft.driveToDistanceTest(distance);
+    m_frontRight.driveToDistanceTest(distance);
+    m_rearLeft.driveToDistanceTest(distance);
+    m_rearRight.driveToDistanceTest(distance);
+  }
+  public double frontLeftPos(){
+    return m_frontLeft.getEncoderPos();
+  }
+  public double frontRightPos(){
+    return m_frontRight.getEncoderPos();
+  }
+  public double rearLeftPos(){
+    return m_rearLeft.getEncoderPos();
+  }
+  public double rearRightPos(){
+    return m_rearRight.getEncoderPos();
+  }
+  public double frontLeftAppliedOutput(){
+    return m_frontLeft.getAppliedOutput();
+  }
+  public double frontRightAppliedOutput(){
+    return m_frontRight.getAppliedOutput();
+  }
+  public double rearLeftAppliedOutput(){
+    return m_rearLeft.getAppliedOutput();
+  }
+  public double rearRightAppliedOutput(){
+    return m_rearRight.getAppliedOutput();
+  }
 }
